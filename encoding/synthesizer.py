@@ -23,7 +23,6 @@ class Synthesizer:
     def __init__(self) -> None:
         print("Text-to-speech initialized")
         if self._device == "cuda":
-            self._model = self._model.to_bettertransformer()
             self._model.enable_cpu_offload()
 
     def synthesize(self, lang, text):
