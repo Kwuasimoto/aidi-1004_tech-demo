@@ -19,7 +19,7 @@ class Translator:
     def translate(self, text, lang):
         content = self._content.format(lang, text)
         response = g4f.ChatCompletion.create(
-            model=g4f.models.gpt_4,
+            model=g4f.models.FreeGpt,
             provider=g4f.Provider.FreeGpt,
             messages=[
                 {
@@ -33,8 +33,9 @@ class Translator:
 
     def question(self, text):
         return g4f.ChatCompletion.create(
+            stream=True,
             model=g4f.models.gpt_4,
-            provider=g4f.Provider.ChatgptAi,
+            provider=g4f.Provider.FreeGpt,
             messages=[{"role": "user", "content": text}],
         )
 

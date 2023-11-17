@@ -1,16 +1,24 @@
 ## Uses sounddevice to record audio and save it to a input.wav file to be used by Whisper-v3
 
+import keyboard
 import sounddevice as sd
+import pyaudio
 import numpy as np
+import wave
+
 from scipy.io.wavfile import write, read
 
 
 class Audio:
-    _channels: int = 2
+    _audio = None
+    _buffer = 1024
+    _channels: int = 1
     _device: str = ""
-    _duration: float = 5
+    _dtype = pyaudio.paInt16
+    _duration: float = 10
     _filename: str = "input.wav"
     _format: str = "wav"
+    _frames: list = []
     _freq: int = 44100
     _input_device: int = 1
     _recording = np.ndarray[np.float64]
@@ -44,7 +52,12 @@ class Audio:
 
     def export(self):
         try:
-            write(self._filename, self._freq, self._recording)
+            sound_file = wave.open(self._filename, "wb")
+            sound_file.setnchannels(self._channels)
+            sound_file.setsampwidth(self._audio.get_sample_size(pyaudio.paInt16))
+            sound_file.setframerate(self._freq)
+            sound_file.writeframes(b"".join(self._frames))
+            sound_file.close()
         except Exception as e:
             print(e)
 
@@ -62,15 +75,60 @@ class Audio:
         except Exception as e:
             print(e)
 
+    def huh(self):
+        print("huh?")
+
     def record(self):
+        print(f"Press R to start recording audio [ouptut={self._filename}]")
+        keyboard.wait("R")
+        self._audio = pyaudio.PyAudio()
         try:
-            # print(sd.default.device)
-            self._recording = sd.rec(
-                int(self._duration * self._freq),
-                samplerate=self._freq,
+            stream = self._audio.open(
+                format=self._dtype,
                 channels=self._channels,
-                device=self._input_device,
+                rate=self._freq,
+                frames_per_buffer=self._buffer,
+                input=True,
             )
-            sd.wait()
+
+            print("Press S to stop recording...")
+            while not keyboard.is_pressed("S"):
+                audio_data = stream.read(1024)
+                self._frames.append(audio_data)
+
+            stream.stop_stream()
+            stream.close()
+            self._audio.terminate()
+
+            self.export()
+            self._audio = None
         except Exception as e:
             print(e)
+
+        # # print(sd.default.device)
+        # self._recording = sd.rec(
+        #     int(self._duration * self._freq),
+        #     samplerate=self._freq,
+        #     channels=self._channels,
+        #     device=self._input_device,
+        # )
+        # sd.wait()
+
+        # print(f"Press R to start recording audio [ouptut={self._filename}]")
+        # keyboard.wait("R")
+
+        # with sd.InputStream(
+        #     channels=self._channels,
+        #     samplerate=self._freq,
+        #     device=self._input_device,
+        # ) as stream:
+        #     audio_data = np.array([], dtype=np.float64)
+
+        #     print("Press S to stop recording...")
+        #     while not keyboard.is_pressed("S"):
+        #         chunk, overflowed = stream.read(64)
+
+        #         audio_data = np.append(audio_data, chunk)
+
+        # self._recording = audio_data
+        # self.export()
