@@ -8,7 +8,7 @@ from scipy.io.wavfile import write
 warnings.filterwarnings(action="ignore", category=UserWarning)
 
 
-class TextToSpeech:
+class Synthesizer:
     _filename = "output.wav"
     _device = "cuda" if torch.cuda.is_available() else "cpu"
     _voices = {"en": "v2/en_speaker_1"}

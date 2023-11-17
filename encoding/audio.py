@@ -88,6 +88,7 @@ class Audio:
                 channels=self._channels,
                 rate=self._freq,
                 frames_per_buffer=self._buffer,
+                input_device_index=self._device,
                 input=True,
             )
 
@@ -104,31 +105,3 @@ class Audio:
             self._audio = None
         except Exception as e:
             print(e)
-
-        # # print(sd.default.device)
-        # self._recording = sd.rec(
-        #     int(self._duration * self._freq),
-        #     samplerate=self._freq,
-        #     channels=self._channels,
-        #     device=self._input_device,
-        # )
-        # sd.wait()
-
-        # print(f"Press R to start recording audio [ouptut={self._filename}]")
-        # keyboard.wait("R")
-
-        # with sd.InputStream(
-        #     channels=self._channels,
-        #     samplerate=self._freq,
-        #     device=self._input_device,
-        # ) as stream:
-        #     audio_data = np.array([], dtype=np.float64)
-
-        #     print("Press S to stop recording...")
-        #     while not keyboard.is_pressed("S"):
-        #         chunk, overflowed = stream.read(64)
-
-        #         audio_data = np.append(audio_data, chunk)
-
-        # self._recording = audio_data
-        # self.export()

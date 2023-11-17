@@ -4,7 +4,7 @@ import torch
 from transformers import AutoModelForSpeechSeq2Seq, AutoProcessor, pipeline
 
 
-class SpeechToText:
+class Transcriber:
     _device = "cuda:0" if torch.cuda.is_available() else "cpu"
     _torch_dtype = torch.float16 if torch.cuda.is_available() else torch.float32
 

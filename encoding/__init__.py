@@ -1,4 +1,4 @@
 from .audio import Audio
-from .speech_to_text import SpeechToText
-from .text_to_speech import TextToSpeech
+from .transcriber import Transcriber
+from .synthesizer import Synthesizer
 from .translator import Translator
