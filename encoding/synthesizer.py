@@ -11,17 +11,26 @@ warnings.filterwarnings(action="ignore", category=UserWarning)
 class Synthesizer:
     _filename = "output.wav"
     _device = "cuda" if torch.cuda.is_available() else "cpu"
-    _voices = {"en": "v2/en_speaker_1"}
+    _voices = {
+        "en": "v2/en_speaker_1",
+        "fr": "v2/fr_speaker_2",
+        "jp": "v2/ja_speaker_3",
+    }
 
     _model_id = "suno/bark"
     _model = AutoModel.from_pretrained(_model_id).to(_device)
-    _processor = AutoProcessor.from_pretrained(_model_id, voice_preset=_voices["en"])
 
     def __init__(self) -> None:
         print("Text-to-speech initialized")
+        if self._device == "cuda":
+            self._model = self._model.to_bettertransformer()
+            self._model.enable_cpu_offload()
 
-    def synthesize(self, text):
-        inputs = self._processor(text=[text], return_tensors="pt").to(self._device)
+    def synthesize(self, lang, text):
+        processor = AutoProcessor.from_pretrained(
+            self._model_id, voice_preset=self._voices[lang]
+        )
+        inputs = processor(text=[text], return_tensors="pt").to(self._device)
         return self._model.generate(**inputs, do_sample=True, pad_token_id=1337)
 
     def write(self, audio_array):

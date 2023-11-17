@@ -88,7 +88,7 @@ class Audio:
                 channels=self._channels,
                 rate=self._freq,
                 frames_per_buffer=self._buffer,
-                input_device_index=self._device,
+                input_device_index=self._input_device,
                 input=True,
             )
 

@@ -19,8 +19,8 @@ class Translator:
     def translate(self, text, lang):
         content = self._content.format(lang, text)
         response = g4f.ChatCompletion.create(
-            model=g4f.models.FreeGpt,
-            provider=g4f.Provider.FreeGpt,
+            stream=False,
+            model=g4f.models.gpt_35_turbo,
             messages=[
                 {
                     "role": "user",
@@ -33,12 +33,21 @@ class Translator:
 
     def question(self, text):
         return g4f.ChatCompletion.create(
-            stream=True,
-            model=g4f.models.gpt_4,
-            provider=g4f.Provider.FreeGpt,
+            stream=False,
+            model=g4f.models.gpt_35_turbo,
             messages=[{"role": "user", "content": text}],
         )
 
+
+# stream = g4f.ChatCompletion.create(
+#     stream=True,
+#     model=g4f.models.gpt_35_turbo,
+#     provider=g4f.Provider.ChatgptAi,
+#     messages=[{"role": "user", "content": f"""Only return the translation of the following text to {lang_code}:
+
+#         {transcription["text"]}
+#     """}],
+# )
 
 # class Translator:
 #     _device = "cuda:0" if torch.cuda.is_available() else "cpu"

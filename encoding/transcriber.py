@@ -33,10 +33,7 @@ class Transcriber:
     def __init__(self):
         torch.device(self._device)
         self._model.to(self._device)
-        print("Speech-to-text instantiated")
+        print(f"Speech-to-text instantiated [device={self._device}]")
 
-    def speech_to_text(self, filename):
-        return self._pipe(filename)
-
-    def translate(self, filename):
+    def transcribe(self, filename):
         return self._pipe(filename)
