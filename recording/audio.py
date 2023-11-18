@@ -67,17 +67,6 @@ class Audio:
         for i, device in enumerate(devices):
             print(f"{i} - {device['name']}")
 
-    def load(self, filename=None):
-        if filename == None:
-            filename = self._filename
-        try:
-            return read(self._filename)
-        except Exception as e:
-            print(e)
-
-    def huh(self):
-        print("huh?")
-
     def record(self):
         print(f"Press R to start recording audio [ouptut={self._filename}]")
         keyboard.wait("R")

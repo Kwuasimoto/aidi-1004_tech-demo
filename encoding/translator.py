@@ -6,7 +6,9 @@ class Translator:
     _content = """
         Conditions: 
         
-        if translating jp: return informal hiragana
+        [
+            If translating jp: return informal hiragana,
+        ]
         
         Only return the translation of the following text to {}:
     

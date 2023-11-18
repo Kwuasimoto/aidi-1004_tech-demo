@@ -21,7 +21,7 @@ class Synthesizer:
     _model = AutoModel.from_pretrained(_model_id).to(_device)
 
     def __init__(self) -> None:
-        print("Text-to-speech initialized")
+        print(f"Text-to-speech initialized [device={self._device}]")
         if self._device == "cuda":
             self._model.enable_cpu_offload()
 
